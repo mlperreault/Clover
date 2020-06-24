@@ -1,4 +1,4 @@
-﻿#include "window.h"
+﻿#include "headers/window.h"
 
 namespace ce {
     namespace graphic {
@@ -114,7 +114,7 @@ namespace ce {
                 NULL, NULL);
             if (!glWindow_)
             {
-                std::cerr << "윈도우 생성 실패" << '\n';
+                std::cerr << "Impossible d'instantier la fenetre gl" << '\n';
                 glfwTerminate();
                 return false;
             }

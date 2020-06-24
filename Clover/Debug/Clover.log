@@ -1,0 +1,29 @@
+﻿  window.cpp
+window.obj : error LNK2019: symbole externe non résolu __imp__glewInit@0 référencé dans la fonction "private: bool __thiscall ce::graphic::glWindow::init_glew(void)" (?init_glew@glWindow@graphic@ce@@AAE_NXZ)
+window.obj : error LNK2019: symbole externe non résolu __imp__glewGetErrorString@4 référencé dans la fonction "private: bool __thiscall ce::graphic::glWindow::init_glew(void)" (?init_glew@glWindow@graphic@ce@@AAE_NXZ)
+window.obj : error LNK2019: symbole externe non résolu _glfwInit référencé dans la fonction "private: bool __thiscall ce::graphic::glWindow::init_glfw(void)" (?init_glfw@glWindow@graphic@ce@@AAE_NXZ)
+window.obj : error LNK2019: symbole externe non résolu _glfwTerminate référencé dans la fonction "public: __thiscall ce::graphic::glWindow::~glWindow(void)" (??1glWindow@graphic@ce@@QAE@XZ)
+window.obj : error LNK2019: symbole externe non résolu _glfwSetErrorCallback référencé dans la fonction "private: bool __thiscall ce::graphic::glWindow::init_glfw(void)" (?init_glfw@glWindow@graphic@ce@@AAE_NXZ)
+window.obj : error LNK2019: symbole externe non résolu _glfwWindowHint référencé dans la fonction "private: bool __thiscall ce::graphic::glWindow::init_glfw(void)" (?init_glfw@glWindow@graphic@ce@@AAE_NXZ)
+window.obj : error LNK2019: symbole externe non résolu _glfwCreateWindow référencé dans la fonction "private: bool __thiscall ce::graphic::glWindow::init_glfw(void)" (?init_glfw@glWindow@graphic@ce@@AAE_NXZ)
+window.obj : error LNK2019: symbole externe non résolu _glfwDestroyWindow référencé dans la fonction "public: __thiscall ce::graphic::glWindow::~glWindow(void)" (??1glWindow@graphic@ce@@QAE@XZ)
+window.obj : error LNK2019: symbole externe non résolu _glfwWindowShouldClose référencé dans la fonction "public: bool __thiscall ce::graphic::glWindow::isOpen(void)" (?isOpen@glWindow@graphic@ce@@QAE_NXZ)
+window.obj : error LNK2019: symbole externe non résolu _glfwSetWindowSizeCallback référencé dans la fonction "private: bool __thiscall ce::graphic::glWindow::init_glfw(void)" (?init_glfw@glWindow@graphic@ce@@AAE_NXZ)
+window.obj : error LNK2019: symbole externe non résolu _glfwPollEvents référencé dans la fonction "public: void __thiscall ce::graphic::glWindow::glRenderer::draw(void)" (?draw@glRenderer@glWindow@graphic@ce@@QAEXXZ)
+window.obj : error LNK2019: symbole externe non résolu _glfwSetKeyCallback référencé dans la fonction "private: bool __thiscall ce::graphic::glWindow::init_glfw(void)" (?init_glfw@glWindow@graphic@ce@@AAE_NXZ)
+window.obj : error LNK2019: symbole externe non résolu _glfwMakeContextCurrent référencé dans la fonction "private: bool __thiscall ce::graphic::glWindow::init_glfw(void)" (?init_glfw@glWindow@graphic@ce@@AAE_NXZ)
+window.obj : error LNK2019: symbole externe non résolu _glfwSwapBuffers référencé dans la fonction "public: void __thiscall ce::graphic::glWindow::glRenderer::draw(void)" (?draw@glRenderer@glWindow@graphic@ce@@QAEXXZ)
+window.obj : error LNK2019: symbole externe non résolu _glfwSwapInterval référencé dans la fonction "private: bool __thiscall ce::graphic::glWindow::init_glfw(void)" (?init_glfw@glWindow@graphic@ce@@AAE_NXZ)
+window.obj : error LNK2001: symbole externe non résolu __imp____glewBindBuffer
+window.obj : error LNK2001: symbole externe non résolu __imp____glewBufferData
+window.obj : error LNK2001: symbole externe non résolu __imp____glewGenBuffers
+window.obj : error LNK2001: symbole externe non résolu __imp____glewDisableVertexAttribArray
+window.obj : error LNK2001: symbole externe non résolu __imp____glewEnableVertexAttribArray
+window.obj : error LNK2001: symbole externe non résolu __imp____glewVertexAttribPointer
+window.obj : error LNK2001: symbole externe non résolu __imp____glewBindVertexArray
+window.obj : error LNK2001: symbole externe non résolu __imp____glewGenVertexArrays
+window.obj : error LNK2001: symbole externe non résolu __imp__glewExperimental
+.\lib\freeglut.lib : warning LNK4272: type d'ordinateur bibliothèque 'x64' en conflit avec le type d'ordinateur cible 'x86'
+.\lib\glew32.lib : warning LNK4272: type d'ordinateur bibliothèque 'x64' en conflit avec le type d'ordinateur cible 'x86'
+.\lib\glfw3.lib : warning LNK4272: type d'ordinateur bibliothèque 'x64' en conflit avec le type d'ordinateur cible 'x86'
+C:\Users\aLL uSER\source\repos\Clover\Debug\Clover.exe : fatal error LNK1120: 24 externes non résolus

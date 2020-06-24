@@ -2,8 +2,8 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 
-#include "window.h"
-#include "colors.h"
+#include "src/headers/window.h"
+#include "src/headers/colors.h"
 
 int main()
 {

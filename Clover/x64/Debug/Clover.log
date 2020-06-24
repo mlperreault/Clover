@@ -1,0 +1,2 @@
+﻿LINK : warning LNK4098: conflit entre la bibliothèque par défaut 'MSVCRT' et les autres bibliothèques ; utilisez /NODEFAULTLIB:library
+  Clover.vcxproj -> C:\Users\aLL uSER\source\repos\Clover\x64\Debug\Clover.exe
