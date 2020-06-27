@@ -101,11 +101,9 @@ namespace ce {
         /// <summary>
         ///     Constructor
         /// </summary>
-        glWindow::glWindow()
-            :
-            glRenderer_{ this }
+        glWindow::glWindow(std::string title, std::size_t width, std::size_t height)
+            : Title_{ title }, Width_ { width }, Height_{ height } , glRenderer_{ this }
         {
-
             // GLFW MUST be initialized before glew
             init_glfw();
             init_glew();
@@ -191,9 +189,9 @@ namespace ce {
 
 
             glWindow_ = glfwCreateWindow(
-                800, // width
-                600, // height
-                "OpenGL Example",
+                Width_, // width
+                Height_, // height
+                Title_.c_str(),
                 NULL, NULL);
 
             if (!glWindow_)

@@ -55,7 +55,7 @@ namespace ce {
                 GLFWwindow* glWindow_;
                 glRenderer glRenderer_;
 
-                glWindow();
+                glWindow(std::string, std::size_t, std::size_t);
                 ~glWindow();
 
                 bool isOpen();
@@ -66,6 +66,10 @@ namespace ce {
             private:
                 bool init_glew();
                 bool init_glfw();
+
+                std::size_t Width_;
+                std::size_t Height_;
+                std::string Title_;
 
         }; // END glWindow
     }

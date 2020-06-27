@@ -9,7 +9,7 @@
 
 int main()
 {
-    ce::graphic::glWindow w{};
+    ce::graphic::glWindow w{"Clover Engine - Test Window", 800, 600};
     auto e = ce::core::Entity{};
     //auto c = ce::core::Node{ e };
     auto r = w.getRendererPtr();
