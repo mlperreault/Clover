@@ -182,17 +182,17 @@ namespace ce {
 
 
             // some glfw parameters
-            glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-            glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-            glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-            glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+            glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR,  CE_OPENGL_MAJOR);
+            glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR,  CE_OPENGL_MINOR);
+            glfwWindowHint(GLFW_OPENGL_PROFILE,         CE_GLFW_OPENGL_PROFILE);
+            glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT,  CE_GLFW_OPENGL_FORWARD_COMPAT);
 
 
             glWindow_ = glfwCreateWindow(
                 Width_, // width
                 Height_, // height
                 Title_.c_str(),
-                NULL, NULL);
+                nullptr, nullptr);
 
             if (!glWindow_)
             {
@@ -216,6 +216,32 @@ namespace ce {
             return true;
         }
 
+        /// <summary>
+        ///     Move constructor
+        /// </summary>
+        /// <param name="other"></param>
+        glWindow::glWindow(glWindow&& other) noexcept 
+        :   glRenderer_{std::move(other.glRenderer_)},
+            glWindow_{other.glWindow_},
+            Width_{other.Width_},
+            Height_{other.Height_},
+            Title_{std::move(other.Title_)}
+        {}
+
+        /// <summary>
+        ///     Move assignement
+        /// </summary>
+        /// <param name="other"></param>
+        glWindow& glWindow::operator=(glWindow&& other) noexcept 
+        {
+            glRenderer_ = std::move(other.glRenderer_);
+            glWindow_ = other.glWindow_;
+            Width_ = other.Width_;
+            Height_ = other.Height_;
+            Title_ = std::move(other.Title_);
+
+            return *this;
+        }
 
         /// <summary>
         ///     Constructor
@@ -223,6 +249,25 @@ namespace ce {
         /// <param name="w"> Parent window handle pointer </param>
         glWindow::glRenderer::glRenderer(glWindow* w) {
             WindowHndl_ = w;
+        }
+
+
+        /// <summary>
+        ///     Move constructor
+        /// </summary>
+        /// <param name="other"></param>
+        glWindow::glRenderer::glRenderer(glRenderer&& other) noexcept
+            : WindowHndl_{ other.WindowHndl_ }
+        {}
+
+        /// <summary>
+        ///     Move assignement
+        /// </summary>
+        /// <param name="other"></param>
+        glWindow::glRenderer& glWindow::glRenderer::operator=(glRenderer&& other) noexcept
+        {
+            WindowHndl_ = other.WindowHndl_;
+            return *this;
         }
 
         /// <summary>
@@ -235,14 +280,6 @@ namespace ce {
 
             //this should be moved into an event system
             glfwPollEvents();
-        }
-
-        /// <summary>
-        ///     Change the base clear color
-        /// </summary>
-        /// <param name="clrcolor"> New color (rgba) </param>
-        void glWindow::glRenderer::setClearColor(color_f clrcolor) {
-            glClearColor(clrcolor.r, clrcolor.g, clrcolor.b, clrcolor.a);
         }
 
         /// <summary>

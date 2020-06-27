@@ -9,16 +9,16 @@
 
 int main()
 {
-    ce::graphic::glWindow w{"Clover Engine - Test Window", 800, 600};
+    ce::graphic::glWindow w{ "Clover Engine - Test Window", 800, 600 };
     auto e = ce::core::Entity{};
     //auto c = ce::core::Node{ e };
     auto r = w.getRendererPtr();
 
     // An array of 3 vectors which represents 3 vertices
     ce::graphic::vertices triangle_1_data = {
-       -1.0f, -1.0f, 0.0f,
-       1.0f, -1.0f, 0.0f,
-       0.0f,  0.0f, 0.0f,
+       -1.0f, -1.0f, 0.0f, //point1
+       1.0f, -1.0f, 0.0f,  //point2
+       0.0f,  0.0f, 0.0f,  //point3
     };
 
     ce::graphic::vertices triangle_2_data = {

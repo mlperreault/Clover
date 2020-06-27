@@ -1,2 +1,5 @@
-﻿  window.cpp
-  Clover.vcxproj -> C:\Users\aLL uSER\source\repos\Clover\x64\Debug\Clover.exe
+﻿  main.cpp
+  window.cpp
+C:\Users\aLL uSER\source\repos\Clover\Clover\src\window.cpp(195,33): warning C4267: 'argument' : conversion de 'size_t' en 'int', perte possible de données
+  Génération de code en cours...
+C:\Users\aLL uSER\source\repos\Clover\Clover\src\window.cpp(235): error C4716: 'ce::graphic::glWindow::operator=' : doit retourner une valeur
