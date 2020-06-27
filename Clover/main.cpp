@@ -4,11 +4,14 @@
 
 #include "src/headers/window.h"
 #include "src/headers/colors.h"
+#include "src/headers/entity.h"
+#include "src/headers/base_component.h"
 
 int main()
 {
     ce::graphic::glWindow w{};
-
+    auto e = ce::core::Entity{};
+    //auto c = ce::core::Node{ e };
     auto r = w.getRendererPtr();
 
     // An array of 3 vectors which represents 3 vertices
