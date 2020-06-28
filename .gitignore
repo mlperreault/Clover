@@ -2,6 +2,6 @@
 # Ce fichier .gitignore a été automatiquement créé par Microsoft(R) Visual Studio.
 ################################################################################
 
-/.vs/Clover/v16/Browse.VC.opendb
-/.vs/Clover/v16/Browse.VC.db-wal
-/.vs/Clover/v16/Browse.VC.db-shm
+/.vs
+/Debug
+/x64
