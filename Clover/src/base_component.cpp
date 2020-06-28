@@ -1,7 +1,7 @@
 #include "headers/base_component.h"
 
 namespace ce {
-	namespace core {
+	namespace Core {
 
 		/// <summary>
 		///		Constructor

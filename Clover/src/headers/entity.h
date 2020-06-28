@@ -2,7 +2,7 @@
 #define ENTITY_H_INCLUDED
 
 namespace ce {
-	namespace core {
+	namespace Core {
 
 		using Entity = std::size_t;
 

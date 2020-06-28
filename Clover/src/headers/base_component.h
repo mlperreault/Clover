@@ -5,7 +5,7 @@
 #include "entity.h"
 
 namespace ce {
-	namespace core {
+	namespace Core {
 
 		// identifies components with a type
 		using CType = std::size_t;

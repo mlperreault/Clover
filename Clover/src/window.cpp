@@ -1,7 +1,7 @@
 ﻿#include "headers/window.h"
 
 namespace ce {
-    namespace graphic {
+    namespace Graphic {
 
         // THIS SHOULD MOVE   V
         
@@ -37,10 +37,16 @@ namespace ce {
         /// <param name="action"> GLFW action enum ( pressed , released .. ) </param>
         /// <param name="mods"></param>
         void key_pressed(GLFWwindow* window, int key, int scancode, int action, int mods) {
-            std::cout << "KEY PRESSED : " << key << std::endl;
+           
             if (key == 'Q' && action == GLFW_PRESS) {
                 glfwTerminate();
                 exit(0);
+            }
+            if (action == GLFW_PRESS) {
+                std::cout << "KEY PRESSED : " << key << std::endl;
+            }
+            if (action == GLFW_RELEASE) {
+                std::cout << "KEY RELEASED : " << key << std::endl;
             }
         }
         // THIS SHOULD MOVE   ^
@@ -105,8 +111,7 @@ namespace ce {
             : Title_{ title }, Width_ { width }, Height_{ height } , glRenderer_{ this }
         {
             // GLFW MUST be initialized before glew
-            init_glfw();
-            init_glew();
+            glfw_is_init = init_glfw() && init_glew();
         }
 
         /// <summary>
@@ -207,7 +212,7 @@ namespace ce {
 
             // set event callbacks
             glfwSetWindowSizeCallback(glWindow_, window_resized);
-            glfwSetKeyCallback(glWindow_, key_pressed);
+            
 
 
             glfwSwapInterval(1);
@@ -225,7 +230,8 @@ namespace ce {
             glWindow_{other.glWindow_},
             Width_{other.Width_},
             Height_{other.Height_},
-            Title_{std::move(other.Title_)}
+            Title_{std::move(other.Title_)},
+            glfw_is_init{other.glfw_is_init}
         {}
 
         /// <summary>
@@ -278,8 +284,6 @@ namespace ce {
             // Swap the buffers !
             glfwSwapBuffers(WindowHndl_->getGLwindowPtr());
 
-            //this should be moved into an event system
-            glfwPollEvents();
         }
 
         /// <summary>

@@ -1,7 +1,7 @@
 ﻿#ifndef WINDOW_H_INCLUDED
 #define WINDOW_H_INCLUDED
 
-#include <GL/glew.h>  
+#include <GL/glew.h> 
 #include <GLFW/glfw3.h>
 
 #include <iostream>
@@ -11,7 +11,7 @@
 #include "colors.h"
 
 namespace ce {
-    namespace graphic {
+    namespace Graphic {
 
         const auto CE_OPENGL_MAJOR = 3;
         const auto CE_OPENGL_MINOR = 3;
@@ -24,8 +24,6 @@ namespace ce {
         GLuint getVertexArray();
 
         // EVENTS SHOULD BE MOVED INTO AN EVENT SYSTEM
-        void window_resized(GLFWwindow* window, int width, int height);
-        void key_pressed(GLFWwindow* window, int key, int scancode, int action, int mods);
         void show_glfw_error(int error, const char* description);
 
         /// <summary>
@@ -87,6 +85,8 @@ namespace ce {
                 glWindow(glWindow&& other) noexcept;
                 glWindow& operator=(glWindow&& other) noexcept;
 
+                bool glfwIsInit() { return glfw_is_init; }
+
             private:
                 bool init_glew();
                 bool init_glfw();
@@ -97,6 +97,7 @@ namespace ce {
                 std::size_t Width_;
                 std::size_t Height_;
                 std::string Title_;
+                bool glfw_is_init;
 
         }; // END glWindow
     }
