@@ -9,8 +9,6 @@ namespace ce {
 		/// <param name="w">Window from which the event system will receive events</param>
 		glEventSystem::glEventSystem(ce::Graphic::glWindow* w)
 		{
-			IsBindedToWindow_ = false;
-
 			if (w && w->glfwIsInit())
 			{
 				auto const window = w->getGLwindowPtr();
@@ -27,8 +25,9 @@ namespace ce {
 					glfwSetKeyCallback(window, kb_action_callback);
 					glfwSetCursorPosCallback(window, mouse_moved_callback);
 					glfwSetMouseButtonCallback(window, mouse_action_callback);
+					glfwSetWindowSizeCallback(window, window_resized_callback);
 
-					IsBindedToWindow_ = true;
+					bindedWindow_ = w;
 				}
 			}
 		}
@@ -39,7 +38,7 @@ namespace ce {
 		/// <param name="other">Event system to move</param>
 		glEventSystem::glEventSystem(glEventSystem&& other) noexcept 
 		:	KeyboardListeners_{std::move(other.KeyboardListeners_)},
-			IsBindedToWindow_{other.IsBindedToWindow_}
+			bindedWindow_{other.bindedWindow_}
 		{}
 
 		/// <summary>
@@ -49,7 +48,7 @@ namespace ce {
 		glEventSystem& glEventSystem::operator=(glEventSystem&& other) noexcept
 		{
 			KeyboardListeners_ = std::move(other.KeyboardListeners_);
-			IsBindedToWindow_ = other.IsBindedToWindow_;
+			bindedWindow_ = other.bindedWindow_;
 
 			return *this;
 		}
@@ -93,7 +92,7 @@ namespace ce {
 		{
 			// do not poll events if the system is not binded to window
 			// which happens when trying to bind 2 glEventSystem to a same window
-			if (IsBindedToWindow_)
+			if (bindedWindow_ != nullptr)
 				glfwPollEvents();
 		}
 
@@ -115,7 +114,9 @@ namespace ce {
 			// get back the pointer on this system stored by glfw (see constructor)
 			// to send the action to the listeners
 			glEventSystem* es = static_cast<glEventSystem*>(glfwGetWindowUserPointer(window));
-			es->sendKbEvent(window, key, scancode, action, mods);
+			
+			if(es != nullptr)
+				es->sendKbEvent(window, key, scancode, action, mods);
 		}
 
 		/// <summary>
@@ -140,7 +141,9 @@ namespace ce {
 			// get back the pointer on this system stored by glfw (see constructor)
 			// to send the action to the listeners
 			glEventSystem* es = static_cast<glEventSystem*>(glfwGetWindowUserPointer(window));
-			es->sendMouseMovedEvent(window, xpos, ypos);
+			
+			if(es != nullptr)
+				es->sendMouseMovedEvent(window, xpos, ypos);
 		}
 
 		/// <summary>
@@ -168,7 +171,24 @@ namespace ce {
 			// get back the pointer on this system stored by glfw (see constructor)
 			// to send the action to the listeners
 			glEventSystem* es = static_cast<glEventSystem*>(glfwGetWindowUserPointer(window));
-			es->sendMouseActionEvent(window, button, action, mods);
+			
+			if(es != nullptr)
+				es->sendMouseActionEvent(window, button, action, mods);
+		}
+
+		/// <summary>
+		///     Window resized event callback
+		/// </summary>
+		/// <param name="wind"> The windows that has been resized </param>
+		/// <param name="width"> New width </param>
+		/// <param name="height"> New height </param>
+		void glEventSystem::window_resized_callback(GLFWwindow* window, int width, int height) {
+			// get back the pointer on this system stored by glfw (see constructor)
+			// to send the action to the listeners
+			glEventSystem* es = static_cast<glEventSystem*>(glfwGetWindowUserPointer(window));
+			
+			if(es != nullptr)
+				es->bindedWindow_->resize(width, height); // let the window deal with resizing !
 		}
 	}
 }

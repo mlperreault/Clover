@@ -17,8 +17,8 @@ namespace ce {
 		/// <summary>
 		///		Generic event struct
 		/// </summary>
-		/// <typeparam name="T">action type</typeparam>
-		/// <typeparam name="U">key type</typeparam>
+		/// <typeparam name="action_type">action type</typeparam>
+		/// <typeparam name="key_type">key type</typeparam>
 		template<class action_type, class key_type>
 		struct Event {
 			action_type action;
@@ -64,26 +64,31 @@ namespace ce {
 				glEventSystem(glEventSystem&& other) noexcept;
 				glEventSystem& operator=(glEventSystem&& other) noexcept;
 
+				void update(int);
+
+				// bind functions
 				void bindKeyPressedListener(KbListener* listener);
 				void bindMouseMovedListener(MouseMovedListener* listener);
 				void bindMouseActionListener(MouseActionListener* listener);
 
-				void update(int);
-
 			private:
+				// static callbacks for glfw
 				static void kb_action_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 				static void mouse_moved_callback(GLFWwindow* window, double xpos, double ypos);
 				static void mouse_action_callback(GLFWwindow* window, int button, int action, int mods);
-
+				static void window_resized_callback(GLFWwindow* wind, int width, int height);
+				
+				// send functions
 				void sendKbEvent(GLFWwindow* window, int key, int scancode, int action, int mods);
 				void sendMouseMovedEvent(GLFWwindow* window, int xpos, int ypos);
 				void sendMouseActionEvent(GLFWwindow* window, int button, int action, int mods);
 
+				// listeners list
 				std::vector<KbListener*> KeyboardListeners_;
 				std::vector<MouseMovedListener*> MouseMovedListeners_;
 				std::vector<MouseActionListener*> MouseActionListeners_;
 
-				bool IsBindedToWindow_;
+				ce::Graphic::glWindow* bindedWindow_;
 		};
 	}
 }

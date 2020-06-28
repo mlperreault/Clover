@@ -23,7 +23,6 @@ namespace ce {
         GLuint bindVertexBuffer(GLuint, vertices);
         GLuint getVertexArray();
 
-        // EVENTS SHOULD BE MOVED INTO AN EVENT SYSTEM
         void show_glfw_error(int error, const char* description);
 
         /// <summary>
@@ -86,6 +85,12 @@ namespace ce {
                 glWindow& operator=(glWindow&& other) noexcept;
 
                 bool glfwIsInit() { return glfw_is_init; }
+                void resize(int width, int height)
+                {
+                    // just clear and swapbuffer
+                    glRenderer_.clear();
+                    glRenderer_.draw();
+                }
 
             private:
                 bool init_glew();

@@ -10,6 +10,8 @@ namespace ce {
 		class System {
 		public:
 			System() {};
+
+			// let concrete systems implement how they update
 			virtual void update(int) = 0;
 		};
 

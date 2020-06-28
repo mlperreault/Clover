@@ -1,4 +1,2 @@
-﻿  event_system.cpp
-C:\Users\aLL uSER\source\repos\Clover\Clover\src\event_system.cpp(143,42): warning C4244: 'argument' : conversion de 'double' en 'int', perte possible de données
-C:\Users\aLL uSER\source\repos\Clover\Clover\src\event_system.cpp(143,36): warning C4244: 'argument' : conversion de 'double' en 'int', perte possible de données
+﻿LINK : warning LNK4098: conflit entre la bibliothèque par défaut 'MSVCRT' et les autres bibliothèques ; utilisez /NODEFAULTLIB:library
   Clover.vcxproj -> C:\Users\aLL uSER\source\repos\Clover\x64\Debug\Clover.exe

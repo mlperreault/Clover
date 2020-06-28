@@ -2,9 +2,6 @@
 
 namespace ce {
     namespace Graphic {
-
-        // THIS SHOULD MOVE   V
-        
         /// <summary>
         ///     Print the glfw error to the error stream
         /// </summary>
@@ -13,43 +10,6 @@ namespace ce {
         void show_glfw_error(int error, const char* description) {
             std::cerr << "Error[" <<error <<"] :" << description << '\n';
         }
-
-        /// <summary>
-        ///     Window resized event callback
-        /// </summary>
-        /// <param name="wind"> The windows that has been resized </param>
-        /// <param name="width"> New width </param>
-        /// <param name="height"> New height </param>
-        void window_resized(GLFWwindow* wind, int width, int height) {
-            std::cout << "Window resized, new window size: " << width << " x " << height << '\n';
-
-            glClearColor(0, 0, 1, 1);
-            glClear(GL_COLOR_BUFFER_BIT);
-            glfwSwapBuffers(wind);
-        }
-
-        /// <summary>
-        ///     Key pressed event callback
-        /// </summary>
-        /// <param name="window"> Window that triggered the event </param>
-        /// <param name="key"> The key value ( ex: 81 => 'Q' ) </param>
-        /// <param name="scancode"></param>
-        /// <param name="action"> GLFW action enum ( pressed , released .. ) </param>
-        /// <param name="mods"></param>
-        void key_pressed(GLFWwindow* window, int key, int scancode, int action, int mods) {
-           
-            if (key == 'Q' && action == GLFW_PRESS) {
-                glfwTerminate();
-                exit(0);
-            }
-            if (action == GLFW_PRESS) {
-                std::cout << "KEY PRESSED : " << key << std::endl;
-            }
-            if (action == GLFW_RELEASE) {
-                std::cout << "KEY RELEASED : " << key << std::endl;
-            }
-        }
-        // THIS SHOULD MOVE   ^
 
         /// <summary>
         ///     Generate an OpenGL Vertex Array Object (VAO)
@@ -209,12 +169,6 @@ namespace ce {
             }
 
             glfwMakeContextCurrent(glWindow_);
-
-            // set event callbacks
-            glfwSetWindowSizeCallback(glWindow_, window_resized);
-            
-
-
             glfwSwapInterval(1);
 
             // maybe usefull for error handling ?
