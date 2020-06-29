@@ -12,7 +12,7 @@ class Main_KBListener : public ce::Event::KbListener {
 public :
     void receive(ce::Event::KbEvent event) {
         if (event.action == ce::Event::CE_KEY_PRESSED) {
-            std::cout << " KEY PRESSED : " << event.key << std::endl;
+            std::cout << " KEY PRESSED :   " << event.key << std::endl;
         }
         else if (event.action == ce::Event::CE_KEY_RELEASED) {
             std::cout << " KEY RELEASED : " << event.key << std::endl;
