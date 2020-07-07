@@ -1,5 +1,4 @@
-﻿  main.cpp
-  store.cpp
-  Génération de code en cours...
-LINK : warning LNK4098: conflit entre la bibliothèque par défaut 'MSVCRT' et les autres bibliothèques ; utilisez /NODEFAULTLIB:library
+﻿  window.cpp
+C:\Users\aLL uSER\source\repos\Clover\Clover\src\headers\glFunc.h(164,1): warning C4267: 'argument' : conversion de 'size_t' en 'GLint', perte possible de données
+C:\Users\aLL uSER\source\repos\Clover\Clover\src\window.cpp(71,85): warning C4267: 'argument' : conversion de 'size_t' en 'int', perte possible de données
   Clover.vcxproj -> C:\Users\aLL uSER\source\repos\Clover\x64\Debug\Clover.exe

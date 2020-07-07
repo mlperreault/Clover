@@ -7,6 +7,10 @@
 #include "src/headers/store.h"
 #include "src/headers/core_components.h"
 
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
+
 // Receive and handle keyboard events
 class Main_KBListener : public ce::Event::KbListener {
 public :
@@ -38,40 +42,6 @@ public:
     }
 };
 
-struct TemporaryStructJustToDraw2Triangles {
-
-    TemporaryStructJustToDraw2Triangles() {
-
-        this->T1_VAO_ID = ce::Graphic::getVertexArray();
-        this->T1_VBO_ID = ce::Graphic::bindVertexBuffer(T1_VAO_ID, triangle_1_data);
-
-        this->T2_VAO_ID = ce::Graphic::getVertexArray();
-        this->T2_VBO_ID = ce::Graphic::bindVertexBuffer(T2_VAO_ID, triangle_2_data);
-
-    }
-
-    GLuint T1_VAO_ID;
-    GLuint T2_VAO_ID;
-
-    GLuint T1_VBO_ID;
-    GLuint T2_VBO_ID;
-
-    // 3 vectors of 3 vertices => vertices positions to draw the triangle
-    ce::Graphic::vertices triangle_1_data = {
-       -1.0f, -1.0f, 0.0f, //point1
-       1.0f, -1.0f, 0.0f,  //point2
-       0.0f,  0.0f, 0.0f,  //point3
-    };
-
-    // 3 vectors of 3 vertices => vertices positions to draw the triangle
-    ce::Graphic::vertices triangle_2_data = {
-       -1.0f, 0.0f, 0.0f,
-       1.0f, 0.0f, 0.0f,
-       0.0f, 1.0f, 0.0f,
-    };
-
-};
-
 
 int main()
 {
@@ -80,7 +50,7 @@ int main()
     auto renderer = w.getRendererPtr();
 
     // Events
-    ce::Event::glEventSystem event_system{ &w };
+    ce::Event::glEventSystem event_system{ renderer };
 
     // World
     ce::Core::Store store{};
@@ -121,19 +91,31 @@ int main()
     // Bind the mouse clicks event listener to the event system
     Main_MouseActionListener ma_main{};
     event_system.bindMouseActionListener(&ma_main);
-
-    // Let's just instantiate 2 triangles.
-    TemporaryStructJustToDraw2Triangles triangles;
-
     
     // Start drawing operations
     renderer->setClearColor(WHITE);
 
+
+    ce::Graphic::Triangle t{
+        ce::Core::fVec3{-1.0f, -1.0f, 0.0f},
+        ce::Core::fVec3{1.0f, -1.0f, 0.0f},
+        ce::Core::fVec3{0.0f, 1.0f, 0.0f}
+    };
+
+    ce::Graphic::Triangle t2{
+        ce::Core::fVec3{-3.0f, -2.0f, 0.0f},
+        ce::Core::fVec3{2.0f, -0.5f, 1.0f},
+        ce::Core::fVec3{0.0f, 1.0f, 2.0f}
+    };
+
     // main loop
+    std::cout << "Window is open : " << w.isOpen() << std::endl;
+    
     while (w.isOpen()) {
         renderer->clear(); // clear the backbuffer
-        renderer->drawTriangle(triangles.T1_VAO_ID, triangles.T1_VBO_ID); // draw triangle 1 on backbuffer
-        renderer->drawTriangle(triangles.T2_VAO_ID, triangles.T2_VBO_ID); // draw triangle 2 on backbuffer
+        renderer->drawTriangle(t);
+        
+        renderer->drawTriangle(t2);
         renderer->draw(); // swap the buffers !
         event_system.update(0); // update the event system
     }

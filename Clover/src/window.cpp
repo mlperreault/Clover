@@ -1,102 +1,27 @@
-﻿#include "headers/window.h"
+﻿#include <iostream>
+
+#include "headers/window.h"
+#include "headers/glFunc.h"
 
 namespace ce {
     namespace Graphic {
-        /// <summary>
-        ///     Print the glfw error to the error stream
-        /// </summary>
-        /// <param name="error"> Error code </param>
-        /// <param name="description"> Error description </param>
-        void show_glfw_error(int error, const char* description) {
-            std::cerr << "Error[" <<error <<"] :" << description << '\n';
-        }
-
-        /// <summary>
-        ///     Generate an OpenGL Vertex Array Object (VAO)
-        /// </summary>
-        /// <returns> The VAO ID </returns>
-        GLuint getVertexArray()
-        {
-            GLuint VertexArrayID;
-            glGenVertexArrays(1, &VertexArrayID);
-
-            return VertexArrayID;
-        }
-
-        /// <summary>
-        ///     Generate and bind a Vertex Buffer Object(VBO) to a VAO
-        /// </summary>
-        /// <param name="vertex_array_id"> VAO ID returned by 'getVertexArray()' </param>
-        /// <param name="vertex_buffer">The vertex buffer containing the vertices data</param>
-        /// <returns> The VBO ID </returns>
-        GLuint bindVertexBuffer(
-            GLuint vertex_array_id,
-            vertices vertex_buffer)
-        {
-            GLuint vertexBufferID;
-
-            // talk with the VAO
-            glBindVertexArray(vertex_array_id);
-
-            // generate , bind and fill the VBO
-            glGenBuffers(1, &vertexBufferID);
-            glBindBuffer(GL_ARRAY_BUFFER, vertexBufferID);
-            glBufferData(GL_ARRAY_BUFFER, vertex_buffer.size() * sizeof(GLfloat), vertex_buffer.data(), GL_STATIC_DRAW);
-
-            // enable the attributes array
-            glEnableVertexAttribArray(0);
-
-            // bind the vertices
-            glBindBuffer(GL_ARRAY_BUFFER, vertexBufferID);
-            glVertexAttribPointer(
-                0,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
-                3,                  // size
-                GL_FLOAT,           // type
-                GL_FALSE,           // normalized?
-                0,                  // stride
-                (void*)0            // array buffer offset
-            );
-
-            // unbind attributes array and VAO
-            glDisableVertexAttribArray(0);
-            glBindVertexArray(0);
-
-            return vertexBufferID;
-        }
 
         /// <summary>
         ///     Constructor
         /// </summary>
         glWindow::glWindow(std::string title, std::size_t width, std::size_t height)
-            : Title_{ title }, Width_ { width }, Height_{ height } , glRenderer_{ this }
+            : Title_{ title }, Width_{ width }, Height_{ height }
         {
-            // GLFW MUST be initialized before glew
-            glfw_is_init = init_glfw() && init_glew();
+            glRenderer_ = glRenderer{ this };
         }
 
-        /// <summary>
-        ///     Destructor
-        /// </summary>
-        glWindow::~glWindow() {
-
-            glfwDestroyWindow(glWindow_);
-            glfwTerminate();
-        }
 
         /// <summary>
         ///     Tells if the window is still open
         /// </summary>
         /// <returns> True or False </returns>
         bool glWindow::isOpen() {
-            return !glfwWindowShouldClose(glWindow_);
-        }
-
-        /// <summary>
-        ///     Get a pointer on the glfw window
-        /// </summary>
-        /// <returns> A Pointer on the glfw window </returns>
-        GLFWwindow* glWindow::getGLwindowPtr() {
-            return glWindow_;
+            return glRenderer_.ContextIsRunning();
         }
 
         /// <summary>
@@ -107,95 +32,28 @@ namespace ce {
             return &glRenderer_;
         }
 
-        /// <summary>
-        ///     Initialize GLEW library
-        /// </summary>
-        /// <returns>true or false</returns>
-        bool glWindow::init_glew() {
 
-            glewExperimental = GL_TRUE;
-
-            GLenum error = glewInit();
-
-            if (error != GLEW_OK) {
-                std::cerr << "GLEW error : " << glewGetErrorString(error) << '\n';
-                glfwTerminate();
-
-                // maybe usefull for error handling ?
-                return false;
-            }
-
-            // maybe usefull for error handling ?
-            return true;
-        }
-
-        /// <summary>
-        ///     Initialize GLFW library
-        /// </summary>
-        /// <returns>true or false</returns>
-        bool glWindow::init_glfw() {
-
-            glfwSetErrorCallback(show_glfw_error);
-
-
-            if (!glfwInit()) {
-                std::cerr << "GLFW init failed." << '\n';
-
-                // maybe usefull for error handling ?
-                return false;
-            }
-
-
-            // some glfw parameters
-            glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR,  CE_OPENGL_MAJOR);
-            glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR,  CE_OPENGL_MINOR);
-            glfwWindowHint(GLFW_OPENGL_PROFILE,         CE_GLFW_OPENGL_PROFILE);
-            glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT,  CE_GLFW_OPENGL_FORWARD_COMPAT);
-
-
-            glWindow_ = glfwCreateWindow(
-                Width_, // width
-                Height_, // height
-                Title_.c_str(),
-                nullptr, nullptr);
-
-            if (!glWindow_)
-            {
-                std::cerr << "Can not instantiate GLFW window." << '\n';
-                glfwTerminate();
-
-                // maybe usefull for error handling ?
-                return false;
-            }
-
-            glfwMakeContextCurrent(glWindow_);
-            glfwSwapInterval(1);
-
-            // maybe usefull for error handling ?
-            return true;
-        }
 
         /// <summary>
         ///     Move constructor
         /// </summary>
         /// <param name="other"></param>
-        glWindow::glWindow(glWindow&& other) noexcept 
-        :   glRenderer_{std::move(other.glRenderer_)},
-            glWindow_{other.glWindow_},
-            Width_{other.Width_},
-            Height_{other.Height_},
-            Title_{std::move(other.Title_)},
-            glfw_is_init{other.glfw_is_init}
-        {}
+        glWindow::glWindow(glWindow&& other) noexcept
+            : Width_{ other.Width_ },
+            Height_{ other.Height_ },
+            Title_{ std::move(other.Title_) },
+            glRenderer_{ std::move(other.glRenderer_) }
+        {
+
+        }
 
         /// <summary>
         ///     Move assignement
         /// </summary>
         /// <param name="other"></param>
-        glWindow& glWindow::operator=(glWindow&& other) noexcept 
+        glWindow& glWindow::operator=(glWindow&& other) noexcept
         {
             glRenderer_ = std::move(other.glRenderer_);
-            glWindow_ = other.glWindow_;
             Width_ = other.Width_;
             Height_ = other.Height_;
             Title_ = std::move(other.Title_);
@@ -209,15 +67,48 @@ namespace ce {
         /// <param name="w"> Parent window handle pointer </param>
         glWindow::glRenderer::glRenderer(glWindow* w) {
             WindowHndl_ = w;
+
+            glWindow_ = GLFunc::CreateContextWindow(w->Title_, w->Width_, w->Height_);
+
+
+            // Projection matrix : 90° Field of View, 1/1 ratio, display range : 0.1 unit <-> 100 units
+            ProjectionMatrix_ = glm::perspective(glm::radians(90.0f), 1.0f, 0.1f, 100.0f);
+
+            // Camera matrix
+            CameraViewMatrix_ = glm::lookAt(
+                glm::vec3(0,0,1), // Camera is at (0,0,1), in World Space
+                glm::vec3(0, 0, 0), // and looks at the origin
+                glm::vec3(0, 1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
+            );
+
+            ShaderProgramID_ = GLFunc::LoadStringShaders(CE_VERTEX_SHADER, CE_FRAGMENT_SHADER);
+            glUseProgram(ShaderProgramID_);
+
+            VAO_ID_ = GLFunc::GetVAO();
         }
 
+        glWindow::glRenderer::glRenderer()
+        : WindowHndl_{ nullptr },
+            glWindow_{ nullptr },
+            ProjectionMatrix_{},
+            CameraViewMatrix_{},
+            ShaderProgramID_{},
+            VAO_ID_{0}
+         {
+            
+         }
 
         /// <summary>
         ///     Move constructor
         /// </summary>
         /// <param name="other"></param>
         glWindow::glRenderer::glRenderer(glRenderer&& other) noexcept
-            : WindowHndl_{ other.WindowHndl_ }
+        : WindowHndl_{ other.WindowHndl_ },
+            glWindow_{other.glWindow_},
+            ProjectionMatrix_{other.ProjectionMatrix_},
+            CameraViewMatrix_{other.CameraViewMatrix_},
+            ShaderProgramID_{other.ShaderProgramID_},
+            VAO_ID_{other.VAO_ID_}
         {}
 
         /// <summary>
@@ -227,6 +118,12 @@ namespace ce {
         glWindow::glRenderer& glWindow::glRenderer::operator=(glRenderer&& other) noexcept
         {
             WindowHndl_ = other.WindowHndl_;
+            glWindow_ = other.glWindow_;
+            ProjectionMatrix_ = other.ProjectionMatrix_;
+            CameraViewMatrix_ = other.CameraViewMatrix_;
+            ShaderProgramID_ = other.ShaderProgramID_;
+            VAO_ID_ = other.VAO_ID_;
+
             return *this;
         }
 
@@ -236,7 +133,7 @@ namespace ce {
         void glWindow::glRenderer::draw() {
 
             // Swap the buffers !
-            glfwSwapBuffers(WindowHndl_->getGLwindowPtr());
+            glfwSwapBuffers(glWindow_);
 
         }
 
@@ -244,29 +141,43 @@ namespace ce {
         ///     Clear the window
         /// </summary>
         void glWindow::glRenderer::clear() {
-            glClear(GL_COLOR_BUFFER_BIT);
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         }
 
-        /// <summary>
-        ///     Draw a triangle on the backbuffer
-        /// </summary>
-        /// <param name="vertexarray"> VAO ID </param>
-        /// <param name="vertexbuffer"> VBO ID </param>
-        void glWindow::glRenderer::drawTriangle(GLuint vertexarray, GLuint vertexbuffer) {
+        void glWindow::glRenderer::drawTriangle(Triangle t) {
 
-            // talk to our VAO
-            glBindVertexArray(vertexarray);
+            
+            // Model matrix : an identity matrix (model will be at the origin)
+            glm::mat4 Model = CE_IDENTITY_MATRIX;
+
+            // Our ModelViewProjection : multiplication of our 3 matrices
+            glm::mat4 mvp = ProjectionMatrix_ * CameraViewMatrix_ * Model; // Remember, matrix multiplication is the other way around
+
+             // talk to our VAO
+            GLFunc::BindVAO(VAO_ID_);
+
+            // Get the shader
+            GLuint ShaderMatrixID_ = glGetUniformLocation(ShaderProgramID_, "MVP");
+
+            // Send our transformation to the currently bound shader, in the "MVP" uniform
+            // This is done in the main loop since each model will have a different MVP matrix (At least for the M part)
+            glUniformMatrix4fv(ShaderMatrixID_, 1, GL_FALSE, &mvp[0][0]);
 
             // enable the attributes array
-            glEnableVertexAttribArray(0);
+            GLFunc::EnableAttribute(0);
 
+            GLuint VBO_ID = GLFunc::BindVBO( VAO_ID_, vertices{
+                t.point_1.x, t.point_1.y, t.point_1.z,
+                t.point_2.x, t.point_2.y, t.point_2.z,
+                t.point_3.x, t.point_3.y, t.point_3.z
+            });
 
             // Draw the triangle !
             glDrawArrays(GL_TRIANGLES, 0, 3); // Starting from vertex 0; 3 vertices total -> 1 triangle
-            
+
             // disable attributes and unbind to avoid errors
-            glDisableVertexAttribArray(0);
-            glBindVertexArray(0);
+            GLFunc::DisableAttribute(0);
+            GLFunc::UnbindVao();
         }
 
     } // graphic namespace

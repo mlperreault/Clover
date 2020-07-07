@@ -4,26 +4,47 @@
 #include <GL/glew.h> 
 #include <GLFW/glfw3.h>
 
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
 #include <iostream>
 #include <memory>
 #include <vector>
 
 #include "colors.h"
+#include "utils.h"
 
 namespace ce {
     namespace Graphic {
 
-        const auto CE_OPENGL_MAJOR = 3;
-        const auto CE_OPENGL_MINOR = 3;
-        const auto CE_GLFW_OPENGL_PROFILE = GLFW_OPENGL_CORE_PROFILE;
-        const auto CE_GLFW_OPENGL_FORWARD_COMPAT = GL_TRUE;
+        // temporary string shader. TODO : Fix the load from files method.
+        const std::string CE_VERTEX_SHADER =
+            "#version 330 core \n\
+            \n\
+            layout(location = 0) in vec3 vertexPosition_modelspace;\n\
+            uniform mat4 MVP;\n\
+            void main() {\n\
+                // Output position of the vertex, in clip space : MVP * position\n\
+                gl_Position = MVP * vec4(vertexPosition_modelspace, 1);\n\
+            }";
 
-        using vertices = std::vector<GLfloat>;
+        // temporary string shader. TODO : Fix the load from files method.
+        const std::string CE_FRAGMENT_SHADER =
+            "#version 330 core\n\
+            \n\
+            out vec3 color;\n\
+            \n\
+            void main() {\n\
+                color = vec3(0,0,1);\n\
+            }";
 
-        GLuint bindVertexBuffer(GLuint, vertices);
-        GLuint getVertexArray();
+        struct Triangle {
+            ce::Core::fVec3 point_1;
+            ce::Core::fVec3 point_2;
+            ce::Core::fVec3 point_3;
+        };
 
-        void show_glfw_error(int error, const char* description);
+        const glm::mat4 CE_IDENTITY_MATRIX = glm::mat4(1.0f);
 
         /// <summary>
         ///     Encapsulate an OpenGL (glfw) window.
@@ -35,45 +56,67 @@ namespace ce {
                 ///     Class for draw operations in the window
                 /// </summary>
                 class glRenderer {
-                    public:
-                        //move constructor private or protected and make window class friend ?
-                        glRenderer(glWindow* w);
 
-                        // draw operations
-                        void clear();
-                        void draw();
-                        void drawTriangle(GLuint vertexarray, GLuint vertexbuffer);
+                public:
+                    //move constructor private or protected and make window class friend ?
+                    glRenderer(glWindow* w);
+                    glRenderer();
 
-                        // render options
-                        void setClearColor(color<float> clrcolor) {
-                            glClearColor(clrcolor.r, clrcolor.g, clrcolor.b, clrcolor.a);
-                        };
+                    // draw operations
+                    void clear();
+                    void draw();
+                    void drawTriangle(Triangle t);
 
-                        void setClearColor(color<int> clrcolor) {
-                            glClearColor(clrcolor.r/255.0f, clrcolor.g/255.0f, clrcolor.b/255.0f, clrcolor.a/255.0f);
-                        };
+                    // render options
+                    void setClearColor(color<float> clrcolor) {
+                        glClearColor(clrcolor.r, clrcolor.g, clrcolor.b, clrcolor.a);
+                    };
 
-                        // not copyable
-                        glRenderer(glRenderer const&) = delete;
-                        glRenderer& operator=(glRenderer const&) = delete;
+                    void setClearColor(color<int> clrcolor) {
+                        glClearColor(clrcolor.r / 255.0f, clrcolor.g / 255.0f, clrcolor.b / 255.0f, clrcolor.a / 255.0f);
+                    };
 
-                        // movable
-                        glRenderer(glRenderer&& other) noexcept;
-                        glRenderer& operator=(glRenderer&& other) noexcept;
+                    // not copyable
+                    glRenderer(glRenderer const&) = delete;
+                    glRenderer& operator=(glRenderer const&) = delete;
 
+                    // movable
+                    glRenderer(glRenderer&& other) noexcept;
+                    glRenderer& operator=(glRenderer&& other) noexcept;
+
+                    bool ContextIsRunning() {
+                        return glWindow_ != nullptr && !glfwWindowShouldClose(glWindow_);
+                    }
+
+                    GLFWwindow* GetContextWindow()
+                    {
+                        return glWindow_;
+                    }
+
+                    void resize(int width, int height)
+                    {
+                        // just clear and swapbuffer
+                        WindowHndl_->resize(width, height);
+                        clear();
+                        draw();
+                    }
 
                     private:
                         // handle on the parent window
+                        GLFWwindow* glWindow_;
                         glWindow* WindowHndl_;
+                        GLuint ShaderProgramID_;
+                        GLuint VAO_ID_;
+
+                        glm::mat4 ProjectionMatrix_;
+                        glm::mat4 CameraViewMatrix_;
 
                 }; // END glRender
 
                 glWindow(std::string, std::size_t, std::size_t);
-                ~glWindow();
 
                 bool isOpen();
 
-                GLFWwindow* getGLwindowPtr();
                 glRenderer* getRendererPtr();
 
                 // not copyable
@@ -84,25 +127,17 @@ namespace ce {
                 glWindow(glWindow&& other) noexcept;
                 glWindow& operator=(glWindow&& other) noexcept;
 
-                bool glfwIsInit() { return glfw_is_init; }
                 void resize(int width, int height)
                 {
-                    // just clear and swapbuffer
-                    glRenderer_.clear();
-                    glRenderer_.draw();
+                    //do nothing yet
                 }
 
             private:
-                bool init_glew();
-                bool init_glfw();
-
-                GLFWwindow* glWindow_;
                 glRenderer glRenderer_;
 
                 std::size_t Width_;
                 std::size_t Height_;
                 std::string Title_;
-                bool glfw_is_init;
 
         }; // END glWindow
     }

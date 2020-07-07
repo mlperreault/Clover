@@ -7,12 +7,11 @@ namespace ce {
 		///		Constructor. This event system may only be binded once to a window. Unbinded event system won't dispatch events. Use 1 event system by window.
 		/// </summary>
 		/// <param name="w">Window from which the event system will receive events</param>
-		glEventSystem::glEventSystem(ce::Graphic::glWindow* w)
+		glEventSystem::glEventSystem(ce::Graphic::glWindow::glRenderer* w)
 		{
-			if (w && w->glfwIsInit())
+			if (w)
 			{
-				auto const window = w->getGLwindowPtr();
-
+				auto const window = w->GetContextWindow();
 				// see if there is already an event system pointer for this window
 				auto es = static_cast<glEventSystem*>(glfwGetWindowUserPointer(window));
 
@@ -28,8 +27,11 @@ namespace ce {
 					glfwSetWindowSizeCallback(window, window_resized_callback);
 
 					bindedWindow_ = w;
+					return;
 				}
 			}
+
+			bindedWindow_ = nullptr;
 		}
 
 		/// <summary>

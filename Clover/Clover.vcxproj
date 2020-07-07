@@ -148,6 +148,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="src\base_component.cpp" />
     <ClCompile Include="src\event_system.cpp" />
+    <ClCompile Include="src\glFunc.cpp" />
     <ClCompile Include="src\store.cpp" />
     <ClCompile Include="src\window.cpp" />
   </ItemGroup>
@@ -158,9 +159,21 @@
     <ClInclude Include="src\headers\entity.h" />
     <ClInclude Include="src\headers\event_keys.h" />
     <ClInclude Include="src\headers\event_system.h" />
+    <ClInclude Include="src\headers\glFunc.h" />
     <ClInclude Include="src\headers\store.h" />
     <ClInclude Include="src\headers\system.h" />
+    <ClInclude Include="src\headers\utils.h" />
     <ClInclude Include="src\headers\window.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="src\shaders\vertexshader.vshader">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\shaders\fragmentshader.fshader">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </None>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

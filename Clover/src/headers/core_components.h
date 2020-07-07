@@ -11,12 +11,13 @@ namespace ce {
 
 		class Node : public BComponent {
 		public:
-			Node(Entity o, int xpos, int ypos, int zpos) : BComponent{o, NODE_TYPE} , x{xpos}, y{ypos}, z{zpos}
+			Node(Entity o, float xpos, float ypos, float zpos) : BComponent{o, NODE_TYPE} , x{xpos}, y{ypos}, z{zpos}
 			{};
-			int x;
-			int y;
-			int z;
+			float x;
+			float y;
+			float z;
 		};
+
 	}
 }
 

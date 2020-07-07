@@ -54,7 +54,7 @@ namespace ce {
 			public:
 
 				// constructor
-				glEventSystem(ce::Graphic::glWindow* w);
+				glEventSystem(ce::Graphic::glWindow::glRenderer* w);
 
 				// not copyable
 				glEventSystem(glEventSystem const&) = delete;
@@ -88,7 +88,7 @@ namespace ce {
 				std::vector<MouseMovedListener*> MouseMovedListeners_;
 				std::vector<MouseActionListener*> MouseActionListeners_;
 
-				ce::Graphic::glWindow* bindedWindow_;
+				ce::Graphic::glWindow::glRenderer* bindedWindow_;
 		};
 	}
 }
