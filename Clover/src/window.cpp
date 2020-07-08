@@ -82,7 +82,7 @@ namespace ce {
             );
 
             ShaderProgramID_ = GLFunc::LoadStringShaders(CE_VERTEX_SHADER, CE_FRAGMENT_SHADER);
-            glUseProgram(ShaderProgramID_);
+            GLFunc::UseShader(ShaderProgramID_);
 
             VAO_ID_ = GLFunc::GetVAO();
         }
@@ -157,23 +157,25 @@ namespace ce {
             GLFunc::BindVAO(VAO_ID_);
 
             // Get the shader
-            GLuint ShaderMatrixID_ = glGetUniformLocation(ShaderProgramID_, "MVP");
+            GLuint ShaderMatrixID_ = GLFunc::GetShaderMatrixID(ShaderProgramID_, "MVP");
 
             // Send our transformation to the currently bound shader, in the "MVP" uniform
             // This is done in the main loop since each model will have a different MVP matrix (At least for the M part)
-            glUniformMatrix4fv(ShaderMatrixID_, 1, GL_FALSE, &mvp[0][0]);
+            GLFunc::BindShaderMatrixData(ShaderMatrixID_, &mvp[0][0]);
 
             // enable the attributes array
             GLFunc::EnableAttribute(0);
 
-            GLuint VBO_ID = GLFunc::BindVBO( VAO_ID_, vertices{
+            vertices v = vertices{
                 t.point_1.x, t.point_1.y, t.point_1.z,
                 t.point_2.x, t.point_2.y, t.point_2.z,
                 t.point_3.x, t.point_3.y, t.point_3.z
-            });
+            };
+
+            GLuint VBO_ID = GLFunc::BindVBO( VAO_ID_, v);
 
             // Draw the triangle !
-            glDrawArrays(GL_TRIANGLES, 0, 3); // Starting from vertex 0; 3 vertices total -> 1 triangle
+            GLFunc::DrawArrays(GL_TRIANGLES, 0, v.size()/3); // Starting from vertex 0; 3 vertices total -> 1 triangle
 
             // disable attributes and unbind to avoid errors
             GLFunc::DisableAttribute(0);

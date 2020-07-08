@@ -26,19 +26,24 @@ namespace ce {
             static void         SetContextWindow(GLFWwindow* cw);
 
             // gl elements handling : VAO , VBO , VIO , NORMALS, UVS
-            static GLuint GetVAO();
-            static void BindVAO(GLuint vao_id);
-            static void UnbindVao();
+            static GLuint   GetVAO();
+            static void     BindVAO(GLuint vao_id);
+            static void     UnbindVao();
 
-            static GLuint BindVBO(GLuint vao_id, vertices vertex_buffer, bool unbind_vao = false);
+            static GLuint   BindVBO(GLuint vao_id, vertices vertex_buffer, bool unbind_vao = false);
 
-            static void EnableAttribute(int attrib);
-            static void DisableAttribute(int attrib);
+            static void     EnableAttribute(int attrib);
+            static void     DisableAttribute(int attrib);
             
-            // shaders loading
-            static GLuint LoadShadersFromFiles(const char* vertex_file_path, const char* fragment_file_path);
-            static GLuint LoadStringShaders(std::string VertexShaderCode, std::string FragmentShaderCode);
+            // shaders 
+            static GLuint   LoadShadersFromFiles(const char* vertex_file_path, const char* fragment_file_path);
+            static GLuint   LoadStringShaders(std::string VertexShaderCode, std::string FragmentShaderCode);
+            static void     UseShader(GLuint program_id);
+            static GLuint   GetShaderMatrixID(GLuint program_id, std::string matrix_name);
+            static void     BindShaderMatrixData(GLuint matrix_id, float* data);
 
+            // draw functions
+            static void DrawArrays(GLenum mode, GLint start, GLsizei count);
         private:
 
             // manage gl state and avoid useless gl call
@@ -56,18 +61,9 @@ namespace ce {
             static bool init_glfw();
             static void show_glfw_error(int error, const char* description);
             static void TerminateGLFW();
-            static void UseShader(GLuint program_id);
             static GLFWwindow* CreateWindow(std::string title, int w, int h);
 
         };
-
-        // Initialization of the internal state
-        bool        GLFunc::InternalState::GLEW_INITIALIZED         = false;
-        bool        GLFunc::InternalState::GLFW_INITIALIZED         = false;
-        bool        GLFunc::InternalState::GLFUNC_READY             = false;
-        GLuint      GLFunc::InternalState::SHADER_PROGRAM_ID        = 0;
-        GLFWwindow* GLFunc::InternalState::CURRENT_CONTEXT_WINDOW   = nullptr;
-        GLuint      GLFunc::InternalState::BINDED_VAO               = 0;
 	}
 }
 

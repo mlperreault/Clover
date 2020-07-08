@@ -1,4 +1,3 @@
-﻿  window.cpp
-C:\Users\aLL uSER\source\repos\Clover\Clover\src\headers\glFunc.h(164,1): warning C4267: 'argument' : conversion de 'size_t' en 'GLint', perte possible de données
-C:\Users\aLL uSER\source\repos\Clover\Clover\src\window.cpp(71,85): warning C4267: 'argument' : conversion de 'size_t' en 'int', perte possible de données
+﻿  glFunc.cpp
+C:\Users\aLL uSER\source\repos\Clover\Clover\src\glFunc.cpp(167,13): warning C4267: 'argument' : conversion de 'size_t' en 'GLint', perte possible de données
   Clover.vcxproj -> C:\Users\aLL uSER\source\repos\Clover\x64\Debug\Clover.exe

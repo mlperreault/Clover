@@ -10,6 +10,15 @@
 namespace ce {
     namespace Graphic {
 
+        // Initialization of the internal state
+        bool        GLFunc::InternalState::GLEW_INITIALIZED = false;
+        bool        GLFunc::InternalState::GLFW_INITIALIZED = false;
+        bool        GLFunc::InternalState::GLFUNC_READY = false;
+        GLuint      GLFunc::InternalState::SHADER_PROGRAM_ID = 0;
+        GLFWwindow* GLFunc::InternalState::CURRENT_CONTEXT_WINDOW = nullptr;
+        GLuint      GLFunc::InternalState::BINDED_VAO = 0;
+
+
         void GLFunc::SetContextWindow(GLFWwindow* cw)
         {
             // avoid rebinding the same context
@@ -24,7 +33,7 @@ namespace ce {
             }
         }
 
-        GLFWwindow* GLFunc::CreateContextWindow(std::string title, int w, int h, bool set_current_context = true) {
+        GLFWwindow* GLFunc::CreateContextWindow(std::string title, int w, int h, bool set_current_context) {
 
             if (!InternalState::GLFW_INITIALIZED)
                 init_glfw();
@@ -117,8 +126,8 @@ namespace ce {
             return VertexArrayID;
         }
 
-        GLuint GLFunc::BindVBO(GLuint vao_id, vertices vertex_buffer, bool rebind_vao = false)
-        {
+        GLuint GLFunc::BindVBO(GLuint vao_id, vertices vertex_buffer, bool rebind_vao){
+            assert(InternalState::GLFUNC_READY && "GLFunc is not Ready. CreateContextWindow( ) must be called first.");
 
 #ifdef CE_VERBOSE
             std::cout << "Binding a VBO to VAO id : " << vao_id << std::endl;
@@ -127,15 +136,20 @@ namespace ce {
             GLuint vertexBufferID;
             GLuint old_vao = 0;
 
-            if (!vao_is_binded(vao_id) && InternalState::BINDED_VAO != 0) {
+            if (!vao_is_binded(vao_id)) {
 
 #ifdef CE_VERBOSE
                 std::cout << "VAO was not binded , binding VAO id : " << vao_id << std::endl;
 #endif
-                old_vao = InternalState::BINDED_VAO;
-                GLFunc::UnbindVao();
+                if (InternalState::BINDED_VAO != 0)
+                {
+                    old_vao = InternalState::BINDED_VAO;
+                    GLFunc::UnbindVao();
+                    rebind_vao = true;
+                }
+                
                 GLFunc::BindVAO(vao_id);
-                rebind_vao = true;
+                
             }
 
             // generate , bind and fill the VBO
@@ -184,6 +198,7 @@ namespace ce {
         }
 
         GLuint GLFunc::LoadShadersFromFiles(const char* vertex_file_path, const char* fragment_file_path) {
+            assert(InternalState::GLFUNC_READY && "GLFunc is not Ready. CreateContextWindow( ) must be called first.");
 
             // Create the shaders
             GLuint VertexShaderID = glCreateShader(GL_VERTEX_SHADER);
@@ -218,6 +233,7 @@ namespace ce {
         }
 
         GLuint GLFunc::LoadStringShaders(std::string VertexShaderCode, std::string FragmentShaderCode) {
+            assert(InternalState::GLFUNC_READY && "GLFunc is not Ready. CreateContextWindow( ) must be called first.");
 
 #ifdef CE_VERBOSE
             std::cout << "Loading shaders" << std::endl;
@@ -358,6 +374,8 @@ namespace ce {
 
         void GLFunc::UseShader(GLuint program_id)
         {
+            assert(InternalState::GLFUNC_READY && "GLFunc is not Ready. CreateContextWindow( ) must be called first.");
+
             if (program_id != InternalState::SHADER_PROGRAM_ID)
             {
 #ifdef CE_VERBOSE
@@ -365,6 +383,30 @@ namespace ce {
 #endif
                 glUseProgram(program_id);
             }
+        }
+
+        GLuint GLFunc::GetShaderMatrixID(GLuint program_id, std::string matrix_name)
+        {
+            assert(InternalState::GLFUNC_READY && "GLFunc is not Ready. CreateContextWindow( ) must be called first.");
+            assert(program_id != 0 && "Shader program id is not valid.");
+               
+            return glGetUniformLocation(program_id, matrix_name.c_str());
+        }
+
+        void GLFunc::BindShaderMatrixData(GLuint matrix_id, float* data)
+        {
+            assert(InternalState::GLFUNC_READY && "GLFunc is not Ready. CreateContextWindow( ) must be called first.");
+            assert(matrix_id != -1 && "Shader matrix id is not valid.");
+
+            glUniformMatrix4fv(matrix_id, 1, GL_FALSE, data);
+        }
+
+        void GLFunc::DrawArrays(GLenum mode, GLint start, GLsizei count)
+        {
+            assert(InternalState::GLFUNC_READY && "GLFunc is not Ready. CreateContextWindow( ) must be called first.");
+            assert(InternalState::BINDED_VAO != 0 && "There is no binded vao.");
+
+            glDrawArrays(GL_TRIANGLES, start, count);
         }
 
     }
