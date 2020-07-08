@@ -1,3 +1,16 @@
-﻿  glFunc.cpp
-C:\Users\aLL uSER\source\repos\Clover\Clover\src\glFunc.cpp(167,13): warning C4267: 'argument' : conversion de 'size_t' en 'GLint', perte possible de données
+﻿  main.cpp
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.26.28801\include\memory(2068,56): warning C4244: 'argument' : conversion de '_Ty' en 'float', perte possible de données
+          with
+          [
+              _Ty=int
+          ]
+C:\Users\aLL uSER\source\repos\Clover\Clover\main.cpp(61): message : voir la référence à l'instanciation de la fonction modèle 'std::unique_ptr<ce::Core::Node,std::default_delete<ce::Core::Node>> std::make_unique<ce::Core::Node,ce::Core::Entity&,int,int,int,0>(ce::Core::Entity &,int &&,int &&,int &&)' en cours de compilation
+  event_system.cpp
+C:\Users\aLL uSER\source\repos\Clover\Clover\src\event_system.cpp(148,43): warning C4244: 'argument' : conversion de 'double' en 'int', perte possible de données
+C:\Users\aLL uSER\source\repos\Clover\Clover\src\event_system.cpp(148,37): warning C4244: 'argument' : conversion de 'double' en 'int', perte possible de données
+  window.cpp
+C:\Users\aLL uSER\source\repos\Clover\Clover\src\window.cpp(71,85): warning C4267: 'argument' : conversion de 'size_t' en 'int', perte possible de données
+C:\Users\aLL uSER\source\repos\Clover\Clover\src\window.cpp(178,59): warning C4267: 'argument' : conversion de 'size_t' en 'GLsizei', perte possible de données
+  Génération de code en cours...
+LINK : warning LNK4098: conflit entre la bibliothèque par défaut 'MSVCRT' et les autres bibliothèques ; utilisez /NODEFAULTLIB:library
   Clover.vcxproj -> C:\Users\aLL uSER\source\repos\Clover\x64\Debug\Clover.exe

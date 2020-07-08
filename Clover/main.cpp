@@ -6,6 +6,7 @@
 #include "src/headers/event_system.h"
 #include "src/headers/store.h"
 #include "src/headers/core_components.h"
+#include "src/headers/glFunc.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -46,7 +47,7 @@ public:
 int main()
 {
     // Rendering
-    ce::Graphic::glWindow w{ "Clover Engine - Test Window", 800, 600 };
+    ce::Graphic::ceWindow w{ "Clover Engine - Test Window", 800, 600 };
     auto renderer = w.getRendererPtr();
 
     // Events
@@ -102,23 +103,18 @@ int main()
         ce::Core::fVec3{0.0f, 1.0f, 0.0f}
     };
 
-    ce::Graphic::Triangle t2{
-        ce::Core::fVec3{-3.0f, -2.0f, 0.0f},
-        ce::Core::fVec3{2.0f, -0.5f, 1.0f},
-        ce::Core::fVec3{0.0f, 1.0f, 2.0f}
-    };
 
     // main loop
     std::cout << "Window is open : " << w.isOpen() << std::endl;
     
     while (w.isOpen()) {
-        renderer->clear(); // clear the backbuffer
-        renderer->drawTriangle(t);
-        
-        renderer->drawTriangle(t2);
-        renderer->draw(); // swap the buffers !
         event_system.update(0); // update the event system
+        renderer->clear(); // clear the backbuffer
+        renderer->drawTriangle(t); // draw the triangle.
+        renderer->draw(); // swap the buffers !
     }
+
+    ce::Graphic::GLFunc::Terminate();
 
     return 0;
 }

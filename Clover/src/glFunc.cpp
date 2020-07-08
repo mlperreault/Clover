@@ -26,7 +26,8 @@ namespace ce {
             {
                 glfwMakeContextCurrent(cw);
                 InternalState::CURRENT_CONTEXT_WINDOW = cw;
-                glfwSwapInterval(1);
+                glfwSwapInterval(1); // should it be here ? Works for now. 
+
 #ifdef CE_VERBOSE
                 std::cout << "Successfully set context window." << std::endl;
 #endif
@@ -407,6 +408,11 @@ namespace ce {
             assert(InternalState::BINDED_VAO != 0 && "There is no binded vao.");
 
             glDrawArrays(GL_TRIANGLES, start, count);
+        }
+
+        bool GLFunc::WindowShouldClose(GLFWwindow* w)
+        {
+            return w != nullptr ? glfwWindowShouldClose(w) : false;
         }
 
     }

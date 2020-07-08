@@ -24,6 +24,7 @@ namespace ce {
             // context creation
             static GLFWwindow*  CreateContextWindow(std::string title, int w, int h, bool set_current_context = true);
             static void         SetContextWindow(GLFWwindow* cw);
+            static bool         WindowShouldClose(GLFWwindow* w);
 
             // gl elements handling : VAO , VBO , VIO , NORMALS, UVS
             static GLuint   GetVAO();
@@ -44,6 +45,25 @@ namespace ce {
 
             // draw functions
             static void DrawArrays(GLenum mode, GLint start, GLsizei count);
+
+            // others
+            static void Terminate() {
+                if (InternalState::GLFUNC_READY) {
+                    TerminateGLFW();
+                    InternalState::GLEW_INITIALIZED = false;
+                    InternalState::GLFW_INITIALIZED = false;
+                    InternalState::CURRENT_CONTEXT_WINDOW = nullptr;
+                    InternalState::BINDED_VAO = 0;
+                    InternalState::SHADER_PROGRAM_ID = 0;
+                    InternalState::GLFUNC_READY = false;
+                }
+            }
+
+            static void ClearBuffers()
+            {
+                glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            }
+
         private:
 
             // manage gl state and avoid useless gl call
@@ -62,7 +82,6 @@ namespace ce {
             static void show_glfw_error(int error, const char* description);
             static void TerminateGLFW();
             static GLFWwindow* CreateWindow(std::string title, int w, int h);
-
         };
 	}
 }

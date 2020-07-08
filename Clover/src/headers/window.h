@@ -49,18 +49,18 @@ namespace ce {
         /// <summary>
         ///     Encapsulate an OpenGL (glfw) window.
         /// </summary>
-        class glWindow {
+        class ceWindow {
             public:
 
                 /// <summary>
                 ///     Class for draw operations in the window
                 /// </summary>
-                class glRenderer {
+                class ceRenderer {
 
                 public:
                     //move constructor private or protected and make window class friend ?
-                    glRenderer(glWindow* w);
-                    glRenderer();
+                    ceRenderer(ceWindow* w);
+                    ceRenderer();
 
                     // draw operations
                     void clear();
@@ -77,34 +77,21 @@ namespace ce {
                     };
 
                     // not copyable
-                    glRenderer(glRenderer const&) = delete;
-                    glRenderer& operator=(glRenderer const&) = delete;
+                    ceRenderer(ceRenderer const&) = delete;
+                    ceRenderer& operator=(ceRenderer const&) = delete;
 
                     // movable
-                    glRenderer(glRenderer&& other) noexcept;
-                    glRenderer& operator=(glRenderer&& other) noexcept;
+                    ceRenderer(ceRenderer&& other) noexcept;
+                    ceRenderer& operator=(ceRenderer&& other) noexcept;
 
-                    bool ContextIsRunning() {
-                        return glWindow_ != nullptr && !glfwWindowShouldClose(glWindow_);
-                    }
-
-                    GLFWwindow* GetContextWindow()
-                    {
-                        return glWindow_;
-                    }
-
-                    void resize(int width, int height)
-                    {
-                        // just clear and swapbuffer
-                        WindowHndl_->resize(width, height);
-                        clear();
-                        draw();
-                    }
+                    bool ContextIsRunning();
+                    GLFWwindow* GetContextWindow();
+                    void resize(int width, int height);
 
                     private:
                         // handle on the parent window
-                        GLFWwindow* glWindow_;
-                        glWindow* WindowHndl_;
+                        GLFWwindow* ceWindow_;
+                        ceWindow* WindowHndl_;
                         GLuint ShaderProgramID_;
                         GLuint VAO_ID_;
 
@@ -113,19 +100,19 @@ namespace ce {
 
                 }; // END glRender
 
-                glWindow(std::string, std::size_t, std::size_t);
+                ceWindow(std::string, std::size_t, std::size_t);
 
                 bool isOpen();
 
-                glRenderer* getRendererPtr();
+                ceRenderer* getRendererPtr();
 
                 // not copyable
-                glWindow(glWindow const&) = delete;
-                glWindow& operator=(glWindow const&) = delete;
+                ceWindow(ceWindow const&) = delete;
+                ceWindow& operator=(ceWindow const&) = delete;
 
                 // movable
-                glWindow(glWindow&& other) noexcept;
-                glWindow& operator=(glWindow&& other) noexcept;
+                ceWindow(ceWindow&& other) noexcept;
+                ceWindow& operator=(ceWindow&& other) noexcept;
 
                 void resize(int width, int height)
                 {
@@ -133,13 +120,13 @@ namespace ce {
                 }
 
             private:
-                glRenderer glRenderer_;
+                ceRenderer ceRenderer_;
 
                 std::size_t Width_;
                 std::size_t Height_;
                 std::string Title_;
 
-        }; // END glWindow
+        }; // END ceWindow
     }
 }
 

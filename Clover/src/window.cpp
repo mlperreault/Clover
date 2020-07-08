@@ -9,10 +9,10 @@ namespace ce {
         /// <summary>
         ///     Constructor
         /// </summary>
-        glWindow::glWindow(std::string title, std::size_t width, std::size_t height)
+        ceWindow::ceWindow(std::string title, std::size_t width, std::size_t height)
             : Title_{ title }, Width_{ width }, Height_{ height }
         {
-            glRenderer_ = glRenderer{ this };
+            ceRenderer_ = ceRenderer{ this };
         }
 
 
@@ -20,16 +20,16 @@ namespace ce {
         ///     Tells if the window is still open
         /// </summary>
         /// <returns> True or False </returns>
-        bool glWindow::isOpen() {
-            return glRenderer_.ContextIsRunning();
+        bool ceWindow::isOpen() {
+            return ceRenderer_.ContextIsRunning();
         }
 
         /// <summary>
         ///     Get a pointer on the window renderer
         /// </summary>
         /// <returns> A pointer on the window renderer </returns>
-        glWindow::glRenderer* glWindow::getRendererPtr() {
-            return &glRenderer_;
+        ceWindow::ceRenderer* ceWindow::getRendererPtr() {
+            return &ceRenderer_;
         }
 
 
@@ -38,11 +38,11 @@ namespace ce {
         ///     Move constructor
         /// </summary>
         /// <param name="other"></param>
-        glWindow::glWindow(glWindow&& other) noexcept
+        ceWindow::ceWindow(ceWindow&& other) noexcept
             : Width_{ other.Width_ },
             Height_{ other.Height_ },
             Title_{ std::move(other.Title_) },
-            glRenderer_{ std::move(other.glRenderer_) }
+            ceRenderer_{ std::move(other.ceRenderer_) }
         {
 
         }
@@ -51,9 +51,9 @@ namespace ce {
         ///     Move assignement
         /// </summary>
         /// <param name="other"></param>
-        glWindow& glWindow::operator=(glWindow&& other) noexcept
+        ceWindow& ceWindow::operator=(ceWindow&& other) noexcept
         {
-            glRenderer_ = std::move(other.glRenderer_);
+            ceRenderer_ = std::move(other.ceRenderer_);
             Width_ = other.Width_;
             Height_ = other.Height_;
             Title_ = std::move(other.Title_);
@@ -65,10 +65,10 @@ namespace ce {
         ///     Constructor
         /// </summary>
         /// <param name="w"> Parent window handle pointer </param>
-        glWindow::glRenderer::glRenderer(glWindow* w) {
+        ceWindow::ceRenderer::ceRenderer(ceWindow* w) {
             WindowHndl_ = w;
 
-            glWindow_ = GLFunc::CreateContextWindow(w->Title_, w->Width_, w->Height_);
+            ceWindow_ = GLFunc::CreateContextWindow(w->Title_, w->Width_, w->Height_);
 
 
             // Projection matrix : 90° Field of View, 1/1 ratio, display range : 0.1 unit <-> 100 units
@@ -87,9 +87,9 @@ namespace ce {
             VAO_ID_ = GLFunc::GetVAO();
         }
 
-        glWindow::glRenderer::glRenderer()
+        ceWindow::ceRenderer::ceRenderer()
         : WindowHndl_{ nullptr },
-            glWindow_{ nullptr },
+            ceWindow_{ nullptr },
             ProjectionMatrix_{},
             CameraViewMatrix_{},
             ShaderProgramID_{},
@@ -102,9 +102,9 @@ namespace ce {
         ///     Move constructor
         /// </summary>
         /// <param name="other"></param>
-        glWindow::glRenderer::glRenderer(glRenderer&& other) noexcept
+        ceWindow::ceRenderer::ceRenderer(ceRenderer&& other) noexcept
         : WindowHndl_{ other.WindowHndl_ },
-            glWindow_{other.glWindow_},
+            ceWindow_{other.ceWindow_},
             ProjectionMatrix_{other.ProjectionMatrix_},
             CameraViewMatrix_{other.CameraViewMatrix_},
             ShaderProgramID_{other.ShaderProgramID_},
@@ -115,10 +115,10 @@ namespace ce {
         ///     Move assignement
         /// </summary>
         /// <param name="other"></param>
-        glWindow::glRenderer& glWindow::glRenderer::operator=(glRenderer&& other) noexcept
+        ceWindow::ceRenderer& ceWindow::ceRenderer::operator=(ceRenderer&& other) noexcept
         {
             WindowHndl_ = other.WindowHndl_;
-            glWindow_ = other.glWindow_;
+            ceWindow_ = other.ceWindow_;
             ProjectionMatrix_ = other.ProjectionMatrix_;
             CameraViewMatrix_ = other.CameraViewMatrix_;
             ShaderProgramID_ = other.ShaderProgramID_;
@@ -130,21 +130,21 @@ namespace ce {
         /// <summary>
         ///     Draw backbuffer to screen
         /// </summary>
-        void glWindow::glRenderer::draw() {
+        void ceWindow::ceRenderer::draw() {
 
             // Swap the buffers !
-            glfwSwapBuffers(glWindow_);
+            glfwSwapBuffers(ceWindow_);
 
         }
 
         /// <summary>
         ///     Clear the window
         /// </summary>
-        void glWindow::glRenderer::clear() {
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        void ceWindow::ceRenderer::clear() {
+            GLFunc::ClearBuffers();
         }
 
-        void glWindow::glRenderer::drawTriangle(Triangle t) {
+        void ceWindow::ceRenderer::drawTriangle(Triangle t) {
 
             
             // Model matrix : an identity matrix (model will be at the origin)
@@ -180,6 +180,23 @@ namespace ce {
             // disable attributes and unbind to avoid errors
             GLFunc::DisableAttribute(0);
             GLFunc::UnbindVao();
+        }
+
+        bool ceWindow::ceRenderer::ContextIsRunning() {
+            return ceWindow_ != nullptr && !GLFunc::WindowShouldClose(ceWindow_);
+        }
+
+        GLFWwindow* ceWindow::ceRenderer::GetContextWindow()
+        {
+            return ceWindow_;
+        }
+
+        void ceWindow::ceRenderer::resize(int width, int height)
+        {
+            // just clear and swapbuffer
+            WindowHndl_->resize(width, height);
+            clear();
+            draw();
         }
 
     } // graphic namespace

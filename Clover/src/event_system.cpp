@@ -7,7 +7,7 @@ namespace ce {
 		///		Constructor. This event system may only be binded once to a window. Unbinded event system won't dispatch events. Use 1 event system by window.
 		/// </summary>
 		/// <param name="w">Window from which the event system will receive events</param>
-		glEventSystem::glEventSystem(ce::Graphic::glWindow::glRenderer* w)
+		glEventSystem::glEventSystem(ce::Graphic::ceWindow::ceRenderer* w)
 		{
 			if (w)
 			{
